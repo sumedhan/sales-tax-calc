@@ -24,8 +24,13 @@ var companySalesData = [
 
 function calculateSalesTax(salesData, taxRates) {
   var obj = {};
+  for (var i = 0; i < companySalesData.length; i++) {
+    var companyObj = companySalesData[i];
+    console.log(companyObj.name);
+  }
   return obj;
 }
+calculateSalesTax();
 
 // HELPER FUNCTIONS
 function calculateTax(taxRate, salesAmount){
