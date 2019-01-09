@@ -24,7 +24,6 @@ var companySalesData = [
 
 function calculateSalesTax(salesData, taxRates) {
   var obj = {};
-
   return obj;
 }
 
@@ -33,11 +32,11 @@ function calculateTax(taxRate, salesAmount){
   return taxRate * salesAmount;
 }
 
-function totalSales(companyName){ //prob become redundant
+function totalSalesByProv(companyName, province){
   var sum = 0;
   for (var i = 0; i < companySalesData.length; i++) {
     var companyObj = companySalesData[i];
-    if (companyObj.name == companyName){
+    if (companyObj.name == companyName && companyObj.province == province){
       for (var j = 0; j < companyObj.sales.length; j++) {
         sum = sum + companyObj.sales[j];
       }
@@ -46,9 +45,12 @@ function totalSales(companyName){ //prob become redundant
   return sum;
 }
 
-function totalSalesByProv(companyName, province){
-  var sum = 0;
-  return sum;
+function findTaxRate(province){
+  for (var prov in salesTaxRates){
+    if (prov == province){
+      return salesTaxRates[prov];
+    }
+  }
 }
 
 var results = calculateSalesTax(companySalesData, salesTaxRates);
