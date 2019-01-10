@@ -22,26 +22,64 @@ var companySalesData = [
   }
 ];
 
+var TelusProvs = ["BC", "SK"];
+
 function calculateSalesTax(salesData, taxRates) {
-  var obj = {};
-  for (var i = 0; i < companySalesData.length; i++) {
-    var companyObj = companySalesData[i];
-    console.log(companyObj.name);
+  var obj = createOutputObjects(salesData);
+  for (var companyName in obj){
+    obj[companyName].totalSales = totalSales(companyName, salesData);
+    obj[companyName].totalTaxes = addTaxes(companyName, compProvs(salesData, companyName), salesData);
   }
-  return obj;
+  // return obj;
+  console.log(obj);
 }
-calculateSalesTax();
 
 // HELPER FUNCTIONS
+function addTaxes(companyName, companyProvs, salesData){
+  console.log(companyProvs);
+  var sum = 0;
+  for (var i = 0; i < companyProvs.length; i++) {
+    sum += calculateTax(findTaxRate(companyProvs[i]), totalSalesByProv(companyName, companyProvs[i], companySalesData));
+  }
+  return sum;
+}
+
+
+function compProvs(salesData, companyName){
+  var companyProvs = [];
+  for (var i = 0; i < salesData.length; i++) {
+    var companyObj = salesData[i];
+    if (companyObj.name == companyName){
+      companyProvs.push(companyObj.province);
+    }
+  }
+  return companyProvs;
+}
+
+// console.log(compProvs(companySalesData, "Telus"));
+
 function calculateTax(taxRate, salesAmount){
   return taxRate * salesAmount;
 }
 
-function totalSalesByProv(companyName, province){
+function totalSalesByProv(companyName, province, salesData){
   var sum = 0;
-  for (var i = 0; i < companySalesData.length; i++) {
-    var companyObj = companySalesData[i];
+  for (var i = 0; i < salesData.length; i++) {
+    var companyObj = salesData[i];
     if (companyObj.name == companyName && companyObj.province == province){
+      for (var j = 0; j < companyObj.sales.length; j++) {
+        sum = sum + companyObj.sales[j];
+      }
+    }
+  }
+  return sum;
+}
+
+function totalSales(companyName, salesData){
+  var sum = 0;
+  for (var i = 0; i < salesData.length; i++) {
+    var companyObj = salesData[i];
+    if (companyObj.name == companyName){
       for (var j = 0; j < companyObj.sales.length; j++) {
         sum = sum + companyObj.sales[j];
       }
@@ -56,6 +94,20 @@ function findTaxRate(province){
       return salesTaxRates[prov];
     }
   }
+}
+
+function createOutputObjects(salesData){
+  var obj = {};
+  for (var i = 0; i < salesData.length; i++) {
+    var companyName = salesData[i].name;
+    if (!obj[companyName]){
+      obj[companyName] = {
+        totalSales: 0,
+        totalTaxes: 0
+      };
+    }
+  }
+  return obj;
 }
 
 var results = calculateSalesTax(companySalesData, salesTaxRates);
