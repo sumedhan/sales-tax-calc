@@ -22,15 +22,12 @@ var companySalesData = [
   }
 ];
 
-var TelusProvs = ["BC", "SK"];
-
 function calculateSalesTax(salesData, taxRates) {
   var obj = createOutputObjects(salesData);
   for (var companyName in obj){
     obj[companyName].totalSales = totalSales(companyName, salesData);
     obj[companyName].totalTaxes = addTaxes(companyName, compProvs(salesData, companyName), salesData);
   }
-  // return obj;
   console.log(obj);
 }
 
