@@ -28,12 +28,11 @@ function calculateSalesTax(salesData, taxRates) {
     obj[companyName].totalSales = totalSales(companyName, salesData);
     obj[companyName].totalTaxes = addTaxes(companyName, compProvs(salesData, companyName), salesData);
   }
-  console.log(obj);
+  return obj;
 }
 
 // HELPER FUNCTIONS
 function addTaxes(companyName, companyProvs, salesData){
-  console.log(companyProvs);
   var sum = 0;
   for (var i = 0; i < companyProvs.length; i++) {
     sum += calculateTax(findTaxRate(companyProvs[i]), totalSalesByProv(companyName, companyProvs[i], companySalesData));
@@ -53,7 +52,6 @@ function compProvs(salesData, companyName){
   return companyProvs;
 }
 
-// console.log(compProvs(companySalesData, "Telus"));
 
 function calculateTax(taxRate, salesAmount){
   return taxRate * salesAmount;
@@ -108,6 +106,7 @@ function createOutputObjects(salesData){
 }
 
 var results = calculateSalesTax(companySalesData, salesTaxRates);
+console.log(results);
 
 /* Expected Results:
 {
