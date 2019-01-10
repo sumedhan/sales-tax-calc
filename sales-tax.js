@@ -22,14 +22,14 @@ var companySalesData = [
   }
 ];
 
-function calculateSalesTax(salesData){
+function calculateSalesTax(salesData, taxRate){
   var obj = {};
   for (var i = 0; i < salesData.length; i++) {
     var companyName = salesData[i].name;
     if (!obj[companyName]){
       obj[companyName] = {
         totalSales: totalSales(companyName, salesData),
-        totalTaxes: addTaxes(companyName, compProvs(salesData, companyName), salesData)
+        totalTaxes: addTaxes(companyName, compProvs(salesData, companyName), salesData, taxRate)
       };
     }
   }
@@ -38,10 +38,10 @@ function calculateSalesTax(salesData){
 
 
 // HELPER FUNCTIONS
-function addTaxes(companyName, companyProvs, salesData){
+function addTaxes(companyName, companyProvs, salesData, taxRate){
   var sum = 0;
   for (var i = 0; i < companyProvs.length; i++) {
-    sum += calculateTax(findTaxRate(companyProvs[i]), totalSalesByProv(companyName, companyProvs[i], salesData));
+    sum += calculateTax(findTaxRate(companyProvs[i], taxRate), totalSalesByProv(companyName, companyProvs[i], salesData));
   }
   return sum;
 }
@@ -90,10 +90,10 @@ function totalSales(companyName, salesData){
 }
 
 
-function findTaxRate(province){
-  for (var prov in salesTaxRates){
+function findTaxRate(province, taxRate){
+  for (var prov in taxRate){
     if (prov == province){
-      return salesTaxRates[prov];
+      return taxRate[prov];
     }
   }
 }
